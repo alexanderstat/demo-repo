@@ -1,0 +1,197 @@
+---
+title: "hw01-alexander-lopez.Rmd"
+author: "Alexander Lopez"
+date: "2/13/2018"
+output: github_document
+---
+
+#2) Importing Automoblie Data Set 
+```{r}
+url <-"https://archive.ics.uci.edu/ml/machine-learning-databases/autos/imports-85.data"
+download.file(url = url, destfile = 'imports-85.data')
+url
+##charater vector for the names of columns 
+library(reader)
+
+
+#numeric varaibles in importing data
+col_names_85 <- c(
+  "symboling", 
+  "normalized_losses",
+  "make",            
+  "fuel_type",        
+  "aspirations",     
+  "num_of_doors",    
+  "body_style",       
+  "drive_wheels",     
+ "engine_location", 
+ "wheel_base" ,       
+ "length",           
+ "width",            
+"height",           
+"curb_weight",    
+"engine_type",     
+"num_of_cylinders" ,
+"engine_size",   
+"fuel_system" ,    
+"bore",            
+"stroke",           
+ "compression_ratio", 
+ "horsepower",       
+ "peak_rpm",
+ "city_mpg",         
+"highway_mpg",    
+"price"    )
+col_types_85 <- c(
+  "integer" , 
+  "character"  ,  
+  "character",
+  "character",
+  "character",
+  "character", 
+  "character", 
+  "character" ,
+  "character" ,  
+  "double" ,   
+  "double"  , 
+  "double" ,
+  "double",  
+  "double", 
+  "character" ,
+  "character",
+  "integer", 
+  "character",
+  "double"  , 
+  "double", 
+  "double" ,
+  "integer" , 
+  "integer"  , 
+  "integer"  , 
+  "integer")
+col_types_85
+
+dat_85 <- read.csv(
+  file = url, 
+  col.names = col_names_85, 
+  sep = ",", 
+  colClasses = col_types_85,
+  na.strings = ("?")
+  
+                   )
+
+dat_85
+
+str(dat_85)
+library("readr")
+
+dat_85copy <- read_csv(
+  file = url,
+  col_names = col_names_85,
+  col_types = "iccccccccdddddccicdddiiii"
+  )
+dat_85copy
+str(dat_85copy)
+```
+
+#3) Technical Questions on Importing Data
+
+* If a vector of column names is not provided, the column names will be taken from the first element of the first row from each column. 
+* If a vector of column names is not provided, and header = FALSE is invoked to read.csv(file) then there will ne no column names and a numerical number will show for each column. 
+* When using the reading table functions, if you don't specify how missing values are codified then the data type of columns that contain '?' will not be read and there will be an error in the console. 
+* The data frame imported without specifying the data type of each column will return a bigger sized object because of the amount of forced character types that are listed. 
+* If the object dat is converted as an R matrix the data values will become coltypes and indicate an amount of values. 
+
+#4) Base Plotting
+```{r}
+##histogram of price with colored bars
+
+hist(dat_85$price, col = "orange")
+
+
+##boxplot of horsepower in horizzontal orientation
+boxplot(dat_85$horsepower, horizontal = TRUE)
+
+
+##barplot of the frequencies of body_style, arranged in decreasing order
+barplot(height = frequency(dat_85$body_style, offset(0)))
+
+##stars() plotting
+x <- data.frame(c(dat_85$wheel_base,dat_85$length,dat_85$width,dat_85$height,dat_85$price)
+                )
+x
+stars(x, nrow = 70, ncol = 100, len = 500)
+```
+
+#5) Summaries
+```{r}
+dat_85
+mean(dat_85$price[dat_85$fuel_type == "gas"], na.rm = TRUE)
+mean(dat_85$price[dat_85$fuel_type == "diesel"], na.rm = TRUE)
+dat_85$make[dat_85$num_of_cylinders == "twelve"]
+dat_85$make[max(dat_85$fuel_type == "diesel")]
+dat_85$price[dat_85$horsepower == 288]
+dat_85$price[max(dat_85$horsepower)]
+quantile(dat_85$city_mpg, na.rm = TRUE, probs = .10)
+quantile(dat_85$highway_mpg, probs = .90)
+dat_85$price[median(quantile(dat_85$city_mpg, na.rm = TRUE, probs = .10))]
+
+         
+```
+
+#6) Data Frames
+* Using the dollar $ operator on a data frame to find the name of a column that does not exist will return a NULL. 
+* The command mtcars[,mpg] fails to return the vector mpg which is a column in the built-in data rframe mtcars, instead an error (.subset(x,j) : invalid subscript type 'list') pops up on the console. 
+* The lack of quotations for mpg creates the error because eventhough there is a data frame called mtcars the column type is a list. 
+* You can include an R list as a "column" of a data frame it will return a listed structure. 
+* Applying as.list() to a data frame will create a list for each column and return a set of lists for the data frame. 
+* To convert abc = as.list(mtcars) into a data frame you can use data.frame(). 
+
+
+#7) Correlations of quantitative variables 
+```{r}
+library("corrplot")
+qdat <- data.frame(
+  na.omit(dat_85[,c(10:14,20:26)])
+                   )
+qdat
+ 
+
+x <- cor(qdat)
+corrplot(x , method = "pie")
+corrplot.mixed(x, tl.col = "black", lower = "number", upper = "shade", lower.col = "blue", number.cex = .7)
+
+
+
+
+
+```
+
+
+#8) Principal Components Analysis
+```{r}
+pca_dat_85 <- prcomp(
+  qdat,
+  scale. = TRUE
+)
+ pca_dat_85
+ 
+ names(pca_dat_85)
+
+ eigenvalues <- pca_dat_85$sdev^2
+eigenvalues
+#After examining the eigenvalues the proportion of variation that is "captured" by the first three components are 6.32, 2.25, and 1.14. 
+barplot(eigenvalues)
+summary(eigenvalues)
+
+eigenvalues1 <- pca_dat_85$rotation
+eigenvalues1
+
+plot(eigenvalues[1:2])
+percentage <- eigenvalues1/sum(eigenvalues1)
+percentage
+barplot(percentage)
+biplot(percentage, eigenvalues1)
+
+#These plots demonstrate how the first principal components contain more varaiblilty than the other principal components. In the first barplot there is higher correlation between the first variables with the overall summary than the other values. The eigenvalues show that the first PC (wheel_base) holds a higher variance. 
+
+```
