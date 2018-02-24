@@ -3972,54 +3972,16 @@ summary(eigenvalues)
 
 ``` r
 eigenvalues1 <- pca_dat_85$rotation
-eigenvalues1
+plot(eigenvalues1[,1], eigenvalues1[,2])
 ```
 
-    ##                           PC1         PC2         PC3         PC4
-    ## wheel_base         0.32692396 -0.27054417  0.11934767 -0.21002511
-    ## length             0.36569353 -0.14418914  0.10514838 -0.10740171
-    ## width              0.35909675 -0.10806971 -0.06852236  0.02009788
-    ## height             0.13943399 -0.38064026  0.49944275 -0.46380229
-    ## curb_weight        0.38390270 -0.04895805 -0.07115161  0.09662591
-    ## stroke             0.05934729 -0.10908648 -0.76767892 -0.55895253
-    ## compression_ratio  0.01933814 -0.53003290 -0.26858766  0.24293756
-    ## horsepower         0.31519058  0.31167436 -0.16080791  0.18135190
-    ## peak_rpm          -0.08273330  0.45801902  0.04487719 -0.50096559
-    ## city_mpg          -0.33811751 -0.28968705 -0.07250886  0.03988481
-    ## highway_mpg       -0.34989782 -0.23953055 -0.07755676  0.03692682
-    ## price              0.34172720  0.07747165 -0.12199605  0.24747780
-    ##                            PC5         PC6         PC7         PC8
-    ## wheel_base         0.032048555 -0.41461753  0.11580351  0.19917220
-    ## length             0.001949777 -0.21105999 -0.09400544  0.52758276
-    ## width             -0.100359781 -0.49545668  0.08522643 -0.53445951
-    ## height            -0.060528663  0.52487361  0.15299332 -0.13506201
-    ## curb_weight       -0.021567243  0.05708229 -0.06661099  0.17228352
-    ## stroke             0.228901818  0.14637016  0.06858809 -0.03397987
-    ## compression_ratio -0.539137256  0.17671078 -0.48472751 -0.03481953
-    ## horsepower        -0.115163169  0.29687663  0.12115904  0.41930975
-    ## peak_rpm          -0.695703743 -0.15702100 -0.08953831  0.02948443
-    ## city_mpg          -0.173503922 -0.16510726  0.38329540  0.17206521
-    ## highway_mpg       -0.167962880 -0.12595986  0.41618431  0.28688959
-    ## price             -0.293465024  0.22527631  0.60013211 -0.23968196
-    ##                            PC9         PC10         PC11         PC12
-    ## wheel_base        -0.483145253 -0.474046740 -0.259909949  0.099269909
-    ## length             0.127855466  0.663256489 -0.069174198 -0.173535166
-    ## width              0.550629507 -0.032094509 -0.034585505  0.019804817
-    ## height             0.216482561 -0.058655785  0.001008972  0.002140646
-    ## curb_weight       -0.009971605 -0.193628795  0.859534236  0.146935002
-    ## stroke            -0.002486957  0.052887480 -0.010871384 -0.014781677
-    ## compression_ratio -0.068796311 -0.024717249 -0.154010413  0.020031187
-    ## horsepower         0.421234863 -0.403808719 -0.329954766 -0.059138753
-    ## peak_rpm          -0.052139651 -0.004616197  0.100248425  0.007613464
-    ## city_mpg           0.108355869 -0.173222560  0.206131303 -0.690497398
-    ## highway_mpg        0.222091393  0.086042334  0.017461844  0.675420447
-    ## price             -0.392561596  0.299178362 -0.045969026 -0.029829228
+![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-2.png)
 
 ``` r
 plot(eigenvalues[1:2])
 ```
 
-![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-2.png)
+![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-3.png)
 
 ``` r
 percentage <- eigenvalues1/sum(eigenvalues1)
@@ -4070,13 +4032,20 @@ percentage
 barplot(percentage)
 ```
 
-![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-3.png)
+![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-4.png)
 
 ``` r
 biplot(percentage, eigenvalues1)
 ```
 
-![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-4.png)
+![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-5.png)
+
+``` r
+scores <- pca_dat_85$x
+plot(scores[,1],scores[,2])
+```
+
+![](hw01-alexander-lopez_files/figure-markdown_github/unnamed-chunk-5-6.png)
 
 ``` r
 #These plots demonstrate how the first principal components contain more varaiblilty than the other principal components. In the first barplot there is higher correlation between the first variables with the overall summary than the other values. The eigenvalues show that the first PC (wheel_base) holds a higher variance. 

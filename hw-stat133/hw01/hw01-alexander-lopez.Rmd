@@ -184,13 +184,16 @@ barplot(eigenvalues)
 summary(eigenvalues)
 
 eigenvalues1 <- pca_dat_85$rotation
-eigenvalues1
+plot(eigenvalues1[,1], eigenvalues1[,2])
 
 plot(eigenvalues[1:2])
 percentage <- eigenvalues1/sum(eigenvalues1)
 percentage
 barplot(percentage)
 biplot(percentage, eigenvalues1)
+scores <- pca_dat_85$x
+plot(scores[,1],scores[,2])
+
 
 #These plots demonstrate how the first principal components contain more varaiblilty than the other principal components. In the first barplot there is higher correlation between the first variables with the overall summary than the other values. The eigenvalues show that the first PC (wheel_base) holds a higher variance. 
 
